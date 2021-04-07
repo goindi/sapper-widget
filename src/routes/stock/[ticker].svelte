@@ -2,6 +2,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
     <link rel="stylesheet" href="https://unpkg.com/chota@latest">
 </svelte:head>
+<!--
 <script context="module">
 	// the (optional) preload function takes a
 	// `{ path, params, query }` object and turns it into
@@ -11,9 +12,15 @@
         return {ticker};
 	}
 </script>
+-->
 <script>
     import { onMount } from 'svelte';
-	export let ticker;
+    import { stores } from '@sapper/app';
+    const { preloading, page, session } = stores();
+    const { host, path, params, query } = $page;
+    console.log(path);
+	let ticker= path.substring(7,);
+
     ticker = ticker.toUpperCase();
     let my_kelly = "no";
     let api_output = {};
@@ -47,7 +54,9 @@
 
                     }
 
-                });
+                }).catch((error) => {
+                      console.error('Error:', error);
+                    });
     }
 
     function currencyFormat(num,decimals) {
@@ -68,11 +77,17 @@
         /* clipboard write failed */
       });
     }
-    onMount(() => {
+
+    /*onMount(() => {
     // ... Run something after component has mounted
     console.log('App component has mounted');
+    console.log("here");
+    console.log(ticker);
     calculateKelly();
-  });
+  });*/
+  if (process.browser)
+      calculateKelly();
+
 
 </script>
 <style>
